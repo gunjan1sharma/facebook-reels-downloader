@@ -241,7 +241,7 @@ function HomePage(props: any) {
           value={videoUrl}
           onChange={handleChange}
           id="url-input"
-          label="Enter or Paste Youtube Video Link Here"
+          label="Enter or Paste Facebook Video Link Here"
           variant="outlined"
         />
         <Button

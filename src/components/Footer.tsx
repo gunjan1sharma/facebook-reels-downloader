@@ -1,4 +1,4 @@
-import LogoImage from "../assets/images/youtube.png";
+import LogoImage from "../assets/images/facebook.png";
 import { Link } from "react-router-dom";
 
 function Footer(props: any) {
@@ -29,7 +29,7 @@ function Footer(props: any) {
         <div className="w-full m-5 flex items-center justify-center">
           <img alt="" src={LogoImage} className="w-7 h-7" />
           <h1 className="text-center ml-4 text-white text-xl font-bold">
-            Facebook Video Downloader+
+            Facebook Reels Downloader+
           </h1>
         </div>
 

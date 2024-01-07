@@ -23,7 +23,7 @@ import {
   Typography,
 } from "@mui/material";
 import ColorImage from "../assets/images/colour.png";
-import LogoImage from "../assets/images/youtube.png";
+import LogoImage from "../assets/images/facebook.png";
 import { ColorContext } from "../extras/ColorContext";
 import MenuIcon from "@mui/icons-material/Menu";
 import SingleColor from "./SingleColor";
@@ -204,7 +204,7 @@ function UpMenu(props: any) {
             style={{ color: headingColor }}
             className="p-5 text-center font-sans text-sm md:text-4xl font-extrabold"
           >
-           Facebook Video Downloader+
+           Facebook Reels Downloader+
           </h1>
         </div>
 
