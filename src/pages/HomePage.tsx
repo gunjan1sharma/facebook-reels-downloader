@@ -7,12 +7,20 @@ import {
   TextField,
 } from "@mui/material";
 import DownloadImage from "../assets/images/download.png";
-import React, { ChangeEventHandler, useEffect, useState } from "react";
+import React, {
+  ChangeEventHandler,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import ReactPlayer from "react-player";
 import axios from "axios";
 import { Root } from "../extras/types";
+import { ColorContext } from "../extras/ColorContext";
+import FeatureIntro from "../components/FeatureIntro";
 
-const API_BASE_URL = `http://192.168.1.88:5001/extras/v1/api/youtube/facebook-video-download?videoUrl=`;
+const API_BASE_URL = `https://appnor-backend.onrender.com/extras/v1/api/youtube/facebook-video-download?videoUrl=`;
 var static_video_url = "";
 
 const sampleResponse: Root = {
@@ -76,6 +84,8 @@ const sampleResponse: Root = {
 };
 
 function HomePage(props: any) {
+  const colorContex = useContext(ColorContext);
+  const scrollRef = useRef<any>(null);
   const [videoUrl, setVideoUrl] = useState("");
   const [inVideoUrl, setInVideoUrl] = useState("");
   const [audioResponse, setAudioResponse] = useState<Root>(sampleResponse);
@@ -85,9 +95,9 @@ function HomePage(props: any) {
   const [open, setOpen] = React.useState(false);
 
   useEffect(() => {
-    //setIsDownloadSuccess(true);
+    scrollToDiv();
     return () => {};
-  }, []);
+  }, [colorContex.point]);
 
   const handleClose = () => {
     setOpen(false);
@@ -156,8 +166,7 @@ function HomePage(props: any) {
 
     if (
       videoUrl === "" ||
-      (!videoUrl.includes("facebook") &&
-      !videoUrl.includes("fb"))
+      (!videoUrl.includes("facebook") && !videoUrl.includes("fb"))
     ) {
       alert("A Valid Facebook Video URL is Required!!");
       return;
@@ -166,7 +175,6 @@ function HomePage(props: any) {
     axios.post<Root>(API_BASE_URL + videoUrl).then(
       (result) => {
         console.log("Hitting Facebook Download API is successful");
-        //console.log("rd :" + JSON.stringify(result.data));
         if (
           result.data.info.status === false ||
           result.data.info.status === undefined
@@ -184,7 +192,7 @@ function HomePage(props: any) {
         setTimeout(() => {
           handleClose();
           setVideoUrl("");
-        }, 5000);
+        }, 3000);
       },
       (error) => {
         console.log("Something went wrong while hitting data.." + error);
@@ -215,9 +223,16 @@ function HomePage(props: any) {
     window.open(audioUrl, "_blank");
   }
 
+  function scrollToDiv() {
+    if (colorContex.point !== 0) {
+      scrollRef.current.scrollIntoView({ behavior: "smooth" });
+      colorContex.setPoint(0);
+    }
+  }
+
   const backdrop = (
     <React.Fragment>
-      <Backdrop 
+      <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={open}
         onClick={handleClose}
@@ -233,9 +248,17 @@ function HomePage(props: any) {
   );
 
   return (
-    <div className="m-10 flex flex-col items-center justify-center">
+    <div
+      ref={scrollRef}
+      className="md:m-10 sm:m-5 flex flex-col items-center justify-center"
+    >
       {backdrop}
-      <div className="flex flex-col items-center border shadow-lg p-4">
+      <FeatureIntro
+        heading="Supercharged Facebook Shorts Downloader⚡️"
+        desc="Imagine a world where your favorite online media is yours to keep, not just to stream. With our tool, that world is real! Download high-quality videos, audio, reels, and even thumbnails – all from a single link, completely FREE!"
+        subheading="But it's not just about convenience – it's about freedom. Break free from limited playlists, buffering woes, and the ever-changing algorithms. Save your must-watch content for offline enjoyment. ➡️"
+      />
+      <div className="flex flex-col items-center border border-gray-500 shadow-lg p-4">
         <TextField
           fullWidth
           value={videoUrl}
@@ -258,11 +281,11 @@ function HomePage(props: any) {
         >
           Play Video
         </Button>
-        <h3 className="text-xs text-center w-80 m-2">
+        <h3 className="text-xs text-center w-80 m-2 p-2">
           A direct prompt to download video will get triggered if video has only
           one format else a list of downloadable video will get presented.
         </h3>
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center p-2">
           <Checkbox
             onChange={(e) => handleCheckboxChange(e.target.checked)}
             defaultChecked
